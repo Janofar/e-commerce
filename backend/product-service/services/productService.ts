@@ -1,5 +1,5 @@
 import ProductRepository from '../repositories/productRepository';
-import { IProduct } from '../models/product';
+import  {IProduct}  from '../models/Product';
 
 class ProductService {
   async createProduct(productData: Partial<IProduct>): Promise<IProduct> {

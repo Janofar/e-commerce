@@ -4,38 +4,41 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('products', {
+    await queryInterface.createTable('product_variations', {
       id: {
         type: Sequelize.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      productId: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false,
+        references: {
+          model: 'products',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      sku: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      slug: {
-        type: Sequelize.STRING,
+      attributeId: {
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
-        unique: true,
+        references: {
+          model: 'category_attributes',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
-      description: {
-        type: Sequelize.TEXT,
-        allowNull: true,
+      stock: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       price: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-      },
-      categoryId: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-          model: 'categories',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -49,6 +52,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('products');
+    await queryInterface.dropTable('product_variations');
   },
 };

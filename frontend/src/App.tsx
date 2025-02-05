@@ -10,6 +10,8 @@ import Cart from './pages/Cart';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import ProductForm  from './pages/ProductForm';
+import CategoryForm from './pages/CategoryForm';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/add-category" element={<CategoryForm />} />
+              <Route path="/add-product" element={<ProductForm />} />
             </Routes>
           </main>
           <Toaster position="top-right" />

@@ -1,24 +1,37 @@
-import { Product, IProduct } from '../models/product';
+import Product, { IProduct } from '../models/Product';
+import { generateSlug } from '../utils/helper';
 
 class ProductRepository {
   async createProduct(productData: Partial<IProduct>): Promise<IProduct> {
-    return await Product.create(productData);
+    const completeProductData: IProduct = {
+      name: productData.name ?? '',
+      slug : generateSlug(productData.name ?? ''),
+      price: productData.price ?? 0,
+      categoryId: productData.categoryId ?? 0,
+      description: productData.description
+    };
+    return await Product.create(completeProductData);
   }
 
   async getAllProducts(): Promise<IProduct[]> {
-    return await Product.find();
+    return await Product.findAll();
   }
 
   async getProductById(productId: string): Promise<IProduct | null> {
-    return await Product.findById(productId);
+    return await Product.findOne({ where: { id : productId} });
   }
 
   async updateProduct(productId: string, updates: Partial<IProduct>): Promise<IProduct | null> {
-    return await Product.findByIdAndUpdate(productId, updates, { new: true });
+    await Product.update(updates, { where: { id: productId } });
+    return await Product.findOne({ where: { id: productId } });
   }
 
   async deleteProduct(productId: string): Promise<IProduct | null> {
-    return await Product.findByIdAndDelete(productId);
+    const product = await Product.findOne({ where: { id: productId } });
+    if (product) {
+      await Product.destroy({ where: { id: productId } });
+    }
+    return product;
   }
 }
 

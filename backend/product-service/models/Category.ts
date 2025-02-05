@@ -1,49 +1,79 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
-
-interface ICategory extends Document {
-    _id: string;
-    name: string;
-    slug: string;
-    parent_id?: string | null;
-    ancestors: {
-        _id: string;
-        name: string;
-        slug: string;
-    }[];
-    description?: string;
-    created_at: Date;
-    updated_at: Date;
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../../config/database"; // Assuming your Sequelize instance is here
+import Joi, { options } from 'joi';
+import CategoryAttribute from "./CategoryAttribute";
+export interface ICategory {
+  id?: number;
+  name: string;
+  slug: string;
+  parentId?: number | null; // Optional for top-level categories
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-// {
-//     "_id": "dress_women", // Unique identifier for the category
-//     "name": "Women's Dresses",
-//     "slug": "womens-dresses",
-//     "parent_id": "clothing", // Reference to the parent category
-//     "ancestors": [
-//       { "_id": "clothing", "name": "Clothing", "slug": "clothing" }
-//     ],
-//     "description": "Explore our collection of women's dresses for every occasion.",
-//     "created_at": "2025-01-06T10:00:00Z",
-//     "updated_at": "2025-01-06T12:00:00Z"
-// }
 
-const CategorySchema = new mongoose.Schema({
-    _id: { type: String, required: true }, // e.g., 'dress_women'
-    name: { type: String, required: true },
-    slug: { type: String, required: true, unique: true }, // SEO-friendly URLs
-    parent_id: { type: String, default: null }, // References parent category
-    ancestors: [
-        {
-            _id: { type: String },
-            name: { type: String },
-            slug: { type: String }
-        }
-    ],
-    description: { type: String },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+class Category extends Model<ICategory> {
+  public id!: number;
+  public name!: string;
+  public slug!: string;
+  public parentId!: number | null;
+  public description!: string;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
+}
+
+Category.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    parentId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+  },
+  {
+    sequelize,
+    tableName: "categories",
+  }
+);
+Category.belongsTo(Category, { foreignKey: 'parentId' });
+Category.hasMany(CategoryAttribute, { foreignKey: 'categoryId', as: 'attributes' });
+CategoryAttribute.belongsTo(Category, { foreignKey: 'categoryId' });
+
+export const categorySchema = Joi.object({
+  name: Joi.string().trim().min(3).max(255).required(),
+  parentId: Joi.number().allow(null),
+  description: Joi.string().allow("", null),
+  attributes: Joi.array().items(
+      Joi.object({
+          name: Joi.string().required(),
+          type: Joi.string().required(),
+          options: Joi.array().items(Joi.string()).when('type', { is: 'select', then: Joi.required() })
+      })
+  ).default([])
 });
-
-const Category: Model<ICategory> = mongoose.model<ICategory>('Category', CategorySchema);
-
-export { Category, ICategory };
+export default Category;

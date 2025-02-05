@@ -6,7 +6,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('categories', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
       },
@@ -17,32 +17,27 @@ module.exports = {
       slug: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true, // SEO-friendly URLs
+        unique: true,
       },
-      parent_id: {
-        type: Sequelize.INTEGER,
-        defaultValue: null, // Nullable reference to parent category
+      parentId: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: true,
         references: {
-          model: 'categories', // Self-referencing the 'categories' table
+          model: 'categories',
           key: 'id',
         },
-        onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
       },
-      ancestors: {
-        type: Sequelize.JSON, // Store ancestors as JSON
-        allowNull: true,
-      },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
-      updated_at: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
         defaultValue: Sequelize.NOW,

@@ -1,8 +1,6 @@
 
 import { PlusCircle, Edit2, Trash2 } from 'lucide-react';
-import Modal from '../../../../components/Modal';
-import { useState } from 'react';
-import { ProductForm } from './ProductForm';
+import { useNavigate } from 'react-router-dom';
 
 const ProductList = () => {
   const products = [
@@ -10,24 +8,30 @@ const ProductList = () => {
     { id: 2, name: 'Smart Watch', price: 199.99, stock: 12, status: 'Low Stock' },
     { id: 3, name: 'Bluetooth Speaker', price: 79.99, stock: 0, status: 'Out of Stock' },
   ];
+  const navigate = useNavigate();
+  const handleAddProduct = ()=>{
+    navigate('/add-product')
+  }
 
-  const [isAddProductModalOpen,setIsAddProductModalOpen] = useState(false)
-  const handleAddProductModal = ()=>{
-    setIsAddProductModalOpen(!isAddProductModalOpen);
+  const handleAddCategory = ()=>{
+    navigate('/add-category')
   }
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-900">Products</h2>
-          <button onClick={handleAddProductModal} className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
-            <PlusCircle className="h-4 w-4 mr-2" />
-            Add Product
-          </button>
+          <div className='flex space-x-4'>
+            <button onClick={handleAddProduct} className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add Product
+            </button>
+            <button onClick={handleAddCategory} className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add Category
+            </button>
+          </div>
         </div>
-        <Modal open={isAddProductModalOpen} title="Add Product" onClose={handleAddProductModal}>
-          <ProductForm prepopData={null} handleFormSubmit={handleAddProductModal}/>
-        </Modal>
         
         <div className="overflow-x-auto">
           <table className="w-full">
