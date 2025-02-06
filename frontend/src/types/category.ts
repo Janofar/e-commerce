@@ -2,7 +2,7 @@ export interface Category {
     id: number;
     name: string;
     slug: string;
-    parent_id: number | null;
+    parentId: number | null;
     description?: string;
     attributes: CategoryAttribute[]
 }
@@ -13,7 +13,7 @@ export interface CategoryAttribute {
 
 export interface CategoryPayload{
     name: string;
-    parent_id: number;
+    parentId: number | null;
     description: string;
     attributes: CategoryAttribute[]
 }

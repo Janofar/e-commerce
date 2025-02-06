@@ -60,6 +60,7 @@ Category.init(
     tableName: "categories",
   }
 );
+Category.hasMany(Category, { foreignKey: 'parentId' });
 Category.belongsTo(Category, { foreignKey: 'parentId' });
 Category.hasMany(CategoryAttribute, { foreignKey: 'categoryId', as: 'attributes' });
 CategoryAttribute.belongsTo(Category, { foreignKey: 'categoryId' });
@@ -70,6 +71,7 @@ export const categorySchema = Joi.object({
   description: Joi.string().allow("", null),
   attributes: Joi.array().items(
       Joi.object({
+          id: Joi.number().optional(),
           name: Joi.string().required(),
           type: Joi.string().required(),
           options: Joi.array().items(Joi.string()).when('type', { is: 'select', then: Joi.required() })

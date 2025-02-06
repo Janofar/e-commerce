@@ -24,7 +24,7 @@ const ParentCategoryInput: React.FC<CategoryInputProps> = ({ parentCategory, set
 
     const handleParentCategorySelect = (e: React.ChangeEvent<HTMLSelectElement>)=>{
         setParentCategory(Number(e.target.value));
-        dispatch(addParentCategory({ id: parseInt(e.target.value), parent_id: parentCategory }))
+        dispatch(addParentCategory({ id: parseInt(e.target.value), parentId: parentCategory }))
     }
     return (
         <div>

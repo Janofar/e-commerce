@@ -9,7 +9,7 @@ import { CategoryPayload } from "../../types/category";
 
 const CategoryForm: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
-  const [type, setType] = useState("");
+  const [type, setType] = useState("category");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [parentCategory, setParentCategory] = useState<number | null>(null);
@@ -27,7 +27,7 @@ const CategoryForm: React.FC = (): React.ReactElement => {
 
     const categoryPayload : CategoryPayload = {
       name: category,
-      parent_id: parentCategory || -1,
+      parentId: parentCategory || null,
       description,
       attributes: attributes,
     };
@@ -55,7 +55,7 @@ const CategoryForm: React.FC = (): React.ReactElement => {
       onSubmit={handleSubmit}
       className="w-[50%] mx-auto flex flex-col space-y-6 p-6 border border-gray-300 rounded-lg shadow-lg"
     >
-      <div className="w-full flex flex-col space-y-2">
+      {/* <div className="w-full flex flex-col space-y-2">
         <label className="text-lg font-medium">
           Do you want to add a category or a subcategory?
         </label>
@@ -79,7 +79,7 @@ const CategoryForm: React.FC = (): React.ReactElement => {
             <span>Sub category</span>
           </label>
         </div>
-      </div>
+      </div> */}
 
       <div className="w-full flex flex-col space-y-4">
         {/* Parent Category Input */}

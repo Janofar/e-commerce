@@ -13,10 +13,10 @@ const categorySlice = createSlice({
         addNewCategory: (state, action: PayloadAction<Category>) => {
             state.push(action.payload); 
         },
-        addParentCategory: (state, action: PayloadAction<{ id: number; parent_id: number | null }>) => {
+        addParentCategory: (state, action: PayloadAction<{ id: number; parentId: number | null }>) => {
             const category = state.find((cat) => cat.id === action.payload.id);
             if (category) {
-                category.parent_id = action.payload.parent_id;
+                category.parentId = action.payload.parentId;
             }
         },
         addCategoryAttribute: (state, action: PayloadAction<{ categoryId: number; attribute: CategoryAttribute }>) => {
