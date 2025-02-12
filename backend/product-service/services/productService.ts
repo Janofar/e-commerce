@@ -1,9 +1,13 @@
 import ProductRepository from '../repositories/productRepository';
 import  {IProduct}  from '../models/Product';
+import { generateSlug } from '../utils/helper';
+import { Product, ProductInput } from '../types/product';
+import { Transaction } from 'sequelize';
 
 class ProductService {
-  async createProduct(productData: Partial<IProduct>): Promise<IProduct> {
-    return await ProductRepository.createProduct(productData);
+  async createProduct(productData: ProductInput,options?: { transaction?: Transaction,imagePaths : string[] | null }): Promise<IProduct> {
+    const updatedData : Product = { ...productData, slug: generateSlug(productData.name),imagePaths : options?.imagePaths || null}
+    return await ProductRepository.createProduct(updatedData);
   }
 
   async getAllProducts(): Promise<IProduct[]> {

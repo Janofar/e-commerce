@@ -2,15 +2,8 @@ import Product, { IProduct } from '../models/Product';
 import { generateSlug } from '../utils/helper';
 
 class ProductRepository {
-  async createProduct(productData: Partial<IProduct>): Promise<IProduct> {
-    const completeProductData: IProduct = {
-      name: productData.name ?? '',
-      slug : generateSlug(productData.name ?? ''),
-      price: productData.price ?? 0,
-      categoryId: productData.categoryId ?? 0,
-      description: productData.description
-    };
-    return await Product.create(completeProductData);
+  async createProduct(productData: IProduct): Promise<IProduct> {
+    return await Product.create(productData);
   }
 
   async getAllProducts(): Promise<IProduct[]> {

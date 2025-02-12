@@ -5,7 +5,7 @@ import CategoryInput from "./components/Category";
 import { addCategory } from "../../api";
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
-import { CategoryPayload } from "../../types/category";
+import { CategoryAttribute, CategoryPayload } from "../../types/category";
 
 const CategoryForm: React.FC = (): React.ReactElement => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const CategoryForm: React.FC = (): React.ReactElement => {
   const [description, setDescription] = useState("");
   const [parentCategory, setParentCategory] = useState<number | null>(null);
   const [attributes, setAttributes] = useState<
-    { name: string; type: string; options?: string[] }[]
+    CategoryAttribute[]
   >([]);
 
   const handleSubmit: React.FormEventHandler = (e) => {

@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addConstraint("category_attributes", {
-      fields: ["categoryId", "name"],
+      fields: ["categoryId", "name"],//for every category id, name should be unique
       type: "unique",
       name: "unique_category_name_constraint",
     });

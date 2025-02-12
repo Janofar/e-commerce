@@ -8,7 +8,7 @@ export interface Category {
 }
 
 export interface CategoryAttribute {
-   name: string; type: string; options?: string[];
+   id?: number | null,name: string; type: string; options?: string[];
 }
 
 export interface CategoryPayload{

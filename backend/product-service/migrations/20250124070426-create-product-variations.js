@@ -19,10 +19,6 @@ module.exports = {
         },
         onDelete: 'CASCADE',
       },
-      sku: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       attributeId: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,

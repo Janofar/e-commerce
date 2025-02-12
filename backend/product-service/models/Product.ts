@@ -8,7 +8,9 @@ export interface IProduct {
   slug: string;
   description?: string;
   price: number;
+  currency : string;
   categoryId: number;
+  imagePaths?: string[] | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -19,7 +21,9 @@ class Product extends Model<IProduct> {
   public slug!: string;
   public description!: string;
   public price!: number;
+  public currency!: string;
   public categoryId!: number;
+  public imagePaths!: string[];
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -49,9 +53,17 @@ Product.init(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    currency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     categoryId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+    },
+    imagePaths: {
+      type: DataTypes.JSON,
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,

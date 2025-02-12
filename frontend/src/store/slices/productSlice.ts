@@ -1,26 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Product } from '../../types/product';
+import { Product, ProductInput } from '../../types/product';
 
-const initialState: Product = {
-    id: -1,
-    slug: '',
+const initialState  : ProductInput= {
     name: '',
-
     description: '',
-    price: -1,
+    price: 0,
+    stock: 0,
     categoryId: -1,
+    currency: '',
+    images: [],
+    variations: [],
+
 };
 
 const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        addNewProduct: (state, action: PayloadAction<Product>) => {
-            state = action.payload
+        updatePriceStockStatus: (state, action: PayloadAction<Product>) => {
+            //state = action.payload
         },
-
+        
     },
 });
 
-export const { addNewProduct } = productSlice.actions;
+export const { updatePriceStockStatus } = productSlice.actions;
 export default productSlice.reducer;

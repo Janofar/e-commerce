@@ -1,28 +1,21 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2, Upload } from 'lucide-react';
 import React, { useState } from 'react'
+import { ProductInput } from '../../../types/product';
 interface UploadImagesProps {
-    setProductData: (data: any) => void;
-    handleFormSubmit: (data: any) => void;
-    goToPreviousStep: (data: any) => void;
-    productData: {
-        name: string;
-        price: number;
-        description: string;
-        category: string;
-        images: File[] | null;
-        imagePaths: string[] | null;
-    } | null;
+    handleChange :(field: string, value: any) => void;
+    productData: ProductInput;
 }
-export const UploadImages: React.FC<UploadImagesProps> = ({ productData, setProductData, handleFormSubmit, goToPreviousStep }) => {
+export const UploadImages: React.FC<UploadImagesProps> = ({ productData, handleChange }) => {
     const [imagePreviews, setImagePreviews] = useState<string[]>(
         productData?.images?.map((file) => URL.createObjectURL(file)) || []
-      );
+    );
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files) {
             const newFiles = Array.from(files);
             if (productData) {
-                setProductData({ ...productData, images: [...(productData.images || []), ...newFiles] });
+                //setProductData({ ...productData, images: [...(productData.images || []), ...newFiles] });
+                handleChange('images',[...(productData.images || []), ...newFiles])
             }
 
             const previewUrls = newFiles.map((file) => URL.createObjectURL(file));
@@ -36,18 +29,32 @@ export const UploadImages: React.FC<UploadImagesProps> = ({ productData, setProd
 
         if (productData && productData.images) {
             const updatedImages = productData.images.filter((_, i) => i !== index);
-            setProductData({ ...productData, images: updatedImages });
+            //setProductData({ ...productData, images: updatedImages });
+            handleChange('images',updatedImages)
         }
     };
     
     return (
-        <form className="space-y-4">
-            <div className="mt-4">
-                <label
-                    htmlFor="file-upload"
-                    className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md cursor-pointer hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
-                >
-                    <span>Upload Images</span>
+        <form className="space-y-6 bg-white p-6 rounded-lg shadow-md w-full max-w-lg mx-auto">
+            <div className="text-center">
+                <h2 className="text-xl font-semibold text-gray-800">Upload Images</h2>
+                <p className="text-sm text-gray-500">Drag & drop or click to upload</p>
+            </div>
+
+            {/* Drag & Drop Upload Box */}
+            <div
+                className="relative flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-indigo-500 transition"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                    e.preventDefault();
+                    const files = Array.from(e.dataTransfer.files);
+                    const newPreviews = files.map((file) => URL.createObjectURL(file));
+                    setImagePreviews((prev) => [...prev, ...newPreviews]);
+                }}
+            >
+                <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-full">
+                    <Upload size={40} className="text-indigo-500" />
+                    <span className="mt-2 text-sm font-medium text-indigo-600">Click to Upload</span>
                 </label>
                 <input
                     id="file-upload"
@@ -59,39 +66,27 @@ export const UploadImages: React.FC<UploadImagesProps> = ({ productData, setProd
                 />
             </div>
 
-            {/* Image Preview section */}
-            <div className="mt-4 overflow-y-auto flex flex-wrap justify-start gap-4 max-h-60">
-                {imagePreviews.map((preview, index) => (
-                    <div key={index} className="relative w-32 h-32">
-                        <img
-                            src={preview}
-                            alt={`Preview ${index + 1}`}
-                            className="object-cover rounded-md border border-gray-300"
-                        />
-                        <button
-                            type="button"
-                            onClick={() => handleRemoveImage(index)}
-                            className="absolute top-0 right-0 p-1 bg-white rounded-full shadow-md text-gray-600 hover:text-red-600"
-                        >
-                            <Trash2 size={16} />
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <button
-                type="button"
-                onClick={goToPreviousStep}
-                className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
-            >
-                Previous
-            </button>
-            <button
-                type="button"
-                onClick={handleFormSubmit}
-                className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
-            >
-                Save
-            </button>
+            {/* Image Preview Grid */}
+            {imagePreviews.length > 0 && (
+                <div className="mt-4 grid grid-cols-3 gap-3">
+                    {imagePreviews.map((preview, index) => (
+                        <div key={index} className="relative group w-28 h-28 border rounded-lg overflow-hidden shadow-sm">
+                            <img
+                                src={preview}
+                                alt={`Preview ${index + 1}`}
+                                className="object-cover w-full h-full"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleRemoveImage(index)}
+                                className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-md text-gray-600 hover:text-red-600 opacity-0 group-hover:opacity-100 transition"
+                            >
+                                <Trash2 size={16} />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
         </form>
     )
 }

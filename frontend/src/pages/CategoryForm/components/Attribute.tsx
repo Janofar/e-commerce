@@ -15,12 +15,11 @@ interface AttributesProps {
 
 const Attributes: React.FC<AttributesProps> = ({ parentCategory, attributes, setAttributes }) => {
   const categories = useSelector((state: RootState) => state.category); 
-  console.log(categories,"catg");
+
   useEffect(()=>{
     if(categories.length && parentCategory){
       let cat = categories.find((cat : Category) => cat.id == parentCategory);
       if (cat) {
-        console.log(cat.attributes, "cat");
         setAttributes([...attributes, ...cat.attributes]);
       }      
     }

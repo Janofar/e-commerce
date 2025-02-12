@@ -4,6 +4,10 @@ export const fetchProducts = () => {
   return axiosInstance.get('/products');
 };
 
-export const addProduct = (productData: any) => {
-  return axiosInstance.post('/products', productData);
+export const addProduct = (productData: FormData) => {
+  return axiosInstance.post('/products', productData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };

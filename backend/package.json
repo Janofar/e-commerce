@@ -21,6 +21,7 @@
     "joi": "^17.13.3",
     "mongoose": "^8.9.3",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.12.0",
     "sequelize": "^6.37.5"
   },
@@ -29,6 +30,8 @@
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.1",
     "@types/sequelize": "^4.28.20",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",

@@ -5,7 +5,6 @@ import CategoryAttribute from "./CategoryAttribute";
 interface IProductVariation {
     id: number;
     productId: number;
-    sku: string;
     stock: number;
     price: number;
     attributeId : number;
@@ -17,8 +16,6 @@ interface IProductVariation {
   class ProductVariation extends Model<IProductVariation> {
     public id!: number;
     public productId!: number;
-    public sku!: string;
-    public stock!: number;
     public price!: number;
     public attributeId!: number;
   
@@ -36,11 +33,6 @@ interface IProductVariation {
       productId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-      },
-      sku: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
       },
       stock: {
         type: DataTypes.INTEGER,
