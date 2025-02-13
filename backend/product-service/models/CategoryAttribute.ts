@@ -40,7 +40,7 @@ export interface ICategoryAttribute {
         allowNull: false,
       },
       type: {
-        type: DataTypes.ENUM("text", "number", "select"),
+        type: DataTypes.ENUM("text", "number", "select","radio","checkbox"),
         allowNull: false,
       },
       options: {

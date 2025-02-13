@@ -18,6 +18,29 @@ class ProductController {
         imagePaths = files.map((file) => file.path);
         
         const product = await ProductService.createProduct(req.body,{transaction,imagePaths});
+        if (!product) {
+          await transaction.rollback();
+          res.status(400).json({ message: 'Error creating product' });
+          return;
+        } else {
+
+          const variations = JSON.parse(req.body.variations);
+          for (const variation of variations) {
+            if (product.id !== undefined) {
+              const productVariation = await ProductService.createProductVariation(product.id, { variation ,transaction});
+              if (!productVariation) {
+                await transaction.rollback();
+                res.status(400).json({ message: 'Error creating product variation' });
+                return;
+              }
+            } else {
+              await transaction.rollback();
+              res.status(400).json({ message: 'Product ID is undefined' });
+              return;
+            }
+            
+          }
+        }
         await transaction.commit();
         res.status(201).json({product,message :'Product added successfully' });
       });

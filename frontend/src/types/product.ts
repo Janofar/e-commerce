@@ -10,6 +10,7 @@ export interface Product {
 }
 
 export interface ProductVariation {
+  attributeId: number;
   name: string;
   value : string;
   price : number;

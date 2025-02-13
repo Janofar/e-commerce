@@ -66,6 +66,9 @@ const ProductForm = () => {
       newErrors.images = "At least one image is required.";
     }
 
+    if (productData.variations.length === 0) {
+      newErrors.variations = "Please fill attributes.";
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -74,12 +77,15 @@ const ProductForm = () => {
     const formData = new FormData();
     formData.append("name", productData.name);
     formData.append("price", productData.price.toString());
+    formData.append("stock", productData.stock.toString());
     formData.append("description", productData.description);
     formData.append("categoryId", productData.categoryId.toString());
     formData.append("currency", productData.currency);
 
+    formData.append("variations", JSON.stringify(productData.variations));
+
     productData.images.forEach((file) => {
-      formData.append("images", file); // "images" must match multer field name
+      formData.append("images", file);
     });
     addProduct(formData).then((res) => {
       toast.success((res.data as { message: string }).message);

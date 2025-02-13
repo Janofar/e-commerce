@@ -8,6 +8,7 @@ export interface IProduct {
   slug: string;
   description?: string;
   price: number;
+  stock : number
   currency : string;
   categoryId: number;
   imagePaths?: string[] | null;
@@ -21,6 +22,7 @@ class Product extends Model<IProduct> {
   public slug!: string;
   public description!: string;
   public price!: number;
+  public stock!: number;
   public currency!: string;
   public categoryId!: number;
   public imagePaths!: string[];
@@ -51,6 +53,10 @@ Product.init(
     },
     price: {
       type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    stock: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     currency: {

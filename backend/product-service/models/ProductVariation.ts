@@ -2,11 +2,12 @@ import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../../config/database";
 import CategoryAttribute from "./CategoryAttribute";
 
-interface IProductVariation {
-    id: number;
+export interface IProductVariation {
+    id?: number;
     productId: number;
     stock: number;
     price: number;
+    response : string
     attributeId : number;
     createdAt?: Date;
     updatedAt?: Date;
@@ -17,7 +18,9 @@ interface IProductVariation {
     public id!: number;
     public productId!: number;
     public price!: number;
+    public stock!: number;
     public attributeId!: number;
+    public response !: string
   
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -45,6 +48,10 @@ interface IProductVariation {
       attributeId: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
+      },
+      response: {
+        type: DataTypes.JSON,
+        allowNull: true,
       },
       createdAt: {
         type: DataTypes.DATE,

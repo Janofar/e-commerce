@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.changeColumn('category_attributes', 'type', {
-      type: Sequelize.ENUM('text', 'number', 'select', 'radio'),
+      type: Sequelize.ENUM('text', 'number', 'select', 'radio','checkbox'),
       allowNull: false
     });
   },
