@@ -107,7 +107,7 @@ const Attributes: React.FC<AttributesProps> = ({ parentCategory, attributes, set
               <option value="radio">Radio</option>
             </select>
           </div>
-          {attribute.type === "select" && (
+          {attribute.type === "select" || attribute.type === "radio" && (
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Options
