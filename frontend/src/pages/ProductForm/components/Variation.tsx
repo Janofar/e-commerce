@@ -49,7 +49,7 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
     ));
   }, [handleChange, name, productData.variations]);
 
-  const handleCheckboxChange = useCallback((e: React.ChangeEvent<HTMLInputElement>, { key, option, index }: { key: 'price' | 'stock'; option: string, index: number }) => {
+  const handleCheckSelectChange = useCallback((e: React.ChangeEvent<HTMLInputElement>, { key, option, index }: { key: 'price' | 'stock'; option: string, index: number }) => {
     const { checked } = e.target;
     setPriceStockStatus(priceStockStatus.map((data, i) => i === index ? { ...data, [key === 'stock' ? 'isSameStock' : 'isSamePrice']: checked } : data));
     handleChange('variations', productData.variations.map(variation =>
@@ -63,30 +63,7 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
     ));
   }, [handleChange, name, productData, priceStockStatus]);
 
-  const handleRadioChange = useCallback((option: string) => {
-    const index = productData.variations.findIndex((variation) => variation.name === name);
-
-    if (index !== -1) {
-      const updatedVariations = productData.variations.map((variation, i) =>
-        i === index ? { ...variation, value: option } : variation
-      );
-
-      handleChange('variations', updatedVariations);
-    } else {
-      handleChange('variations', [
-        ...productData.variations,
-        {
-          name,
-          attributeId: id,
-          value: option,
-          price: productData.price,
-          stock: productData.stock,
-        },
-      ]);
-    }
-  }, [handleChange, name, productData]);
-
-  const handleTextChange = useCallback((value: string | number) => {
+  const handleFieldChange = useCallback((value: string | number) => {
     const index = productData.variations.findIndex((variation) => variation.name === name);
 
     if (index !== -1) {
@@ -154,7 +131,7 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
                         <input
                           type="checkbox"
                           checked={priceStockStatus[index]?.isSameStock ?? false}
-                          onChange={(e) => handleCheckboxChange(e, { key: 'stock', option, index })}
+                          onChange={(e) => handleCheckSelectChange(e, { key: 'stock', option, index })}
                           className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
                         />
                         Same as total stock
@@ -163,7 +140,7 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
                         <input
                           type="checkbox"
                           checked={priceStockStatus[index]?.isSamePrice ?? false}
-                          onChange={(e) => handleCheckboxChange(e, { key: 'price', option, index })}
+                          onChange={(e) => handleCheckSelectChange(e, { key: 'price', option, index })}
                           className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-400"
                         />
                         Same as total price
@@ -187,8 +164,33 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
                   name={name}
                   value={option}
                   checked={!!productData.variations.find((variation) => variation.name === name && variation.value === option)}
-                  onChange={() => handleRadioChange(option)}
+                  onChange={() => handleFieldChange(option)}
                   className="w-5 h-5 text-blue-500 border-gray-300 focus:ring-blue-400"
+                />
+                <span className="font-medium text-gray-800 capitalize">{option}</span>
+              </label>
+            ))}
+          </div>
+        </>
+      )}
+      {type === "checkbox" && (
+        <>
+          <div className="p-4 border-b text-lg font-semibold text-gray-700 capitalize">{name}</div>
+          <div className="p-4 space-y-3">
+            {options.map((option) => (
+              <label
+                key={option}
+                className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer bg-white hover:bg-gray-100 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name={name}
+                  value={option}
+                  checked={!!productData.variations.find(
+                    (variation) => variation.name === name && variation.value === option
+                  )}
+                  onChange={() => handleFieldChange(option)}
+                  className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-2 focus:ring-blue-400"
                 />
                 <span className="font-medium text-gray-800 capitalize">{option}</span>
               </label>
@@ -204,7 +206,7 @@ const Variation: React.FC<Props> = ({ attribute, productData, handleChange }) =>
               type={type}
               placeholder="Enter value"
               value={productData.variations.find((variation) => variation.name === name)?.value || ""}
-              onChange={(e) => handleTextChange(e.target.value)}
+              onChange={(e) => handleFieldChange(e.target.value)}
               className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-400"
             />
           </div>

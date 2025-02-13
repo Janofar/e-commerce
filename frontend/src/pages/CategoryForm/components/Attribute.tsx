@@ -1,31 +1,19 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store/store";
-import { Category } from "../../../types/category";
+import React, { useEffect, useState } from "react";
+import { CategoryAttribute } from "../../../types/category";
 
 interface AttributesProps {
-  attributes: { name: string; type: string; options?: string[] }[];
-  setAttributes: React.Dispatch<
-    React.SetStateAction<
-      { name: string; type: string; options?: string[] }[]
-    >
-  >;
-  parentCategory : number | null;
+  handleAttributeData: (attributes: CategoryAttribute[]) => void;
 }
 
-const Attributes: React.FC<AttributesProps> = ({ parentCategory, attributes, setAttributes }) => {
-  const categories = useSelector((state: RootState) => state.category); 
+const Attributes: React.FC<AttributesProps> = ({ handleAttributeData}) => {
+  const [attributes, setAttributes] = useState<CategoryAttribute[]>([]);
+  
+  useEffect(() => { 
+    handleAttributeData(attributes);
+  },[attributes])
 
-  useEffect(()=>{
-    if(categories.length && parentCategory){
-      let cat = categories.find((cat : Category) => cat.id == parentCategory);
-      if (cat) {
-        setAttributes([...attributes, ...cat.attributes]);
-      }      
-    }
-  },[categories])
   const handleAddAttribute = () => {
-    setAttributes([...attributes, { name: "", type: "text" }]);
+    setAttributes([...attributes, { id: null, name: "", type: "text" }]);
   };
 
   const handleAttributeChange = (
@@ -37,8 +25,8 @@ const Attributes: React.FC<AttributesProps> = ({ parentCategory, attributes, set
     updatedAttributes[index][field] = value;
 
     // Reset options if type changes to non-select
-    if (field === "type" && value !== "select") {
-      delete updatedAttributes[index].options;
+    if (field === "type" && value === "text" || value === "number") {
+      updatedAttributes[index].options = [];
     }
 
     setAttributes(updatedAttributes);
@@ -105,9 +93,12 @@ const Attributes: React.FC<AttributesProps> = ({ parentCategory, attributes, set
               <option value="number">Number</option>
               <option value="select">Select</option>
               <option value="radio">Radio</option>
+              <option value="checkbox">Checkbox</option>
             </select>
           </div>
-          {attribute.type === "select" || attribute.type === "radio" && (
+          {(attribute.type === "select" 
+          || attribute.type === "radio" 
+          || attribute.type === "checkbox" )&& (
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">
                 Options

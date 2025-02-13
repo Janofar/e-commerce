@@ -1,23 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface CategoryInputProps {
-  category: string;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
-  isSubCategory : boolean;
+  handleCategoryData: (data : string) => void;
 }
 
-const CategoryInput: React.FC<CategoryInputProps> = ({ category, setCategory,isSubCategory }) => {
+const CategoryInput: React.FC<CategoryInputProps> = ({handleCategoryData }) => {
+  const [category, setCategory] = useState("");
+  useEffect(() => {
+    
+    handleCategoryData(category);
+  }, [category]);
   return (
     <div>
       <label className="block mb-2 text-sm font-medium text-gray-700">
-        {isSubCategory ? "Sub Category" : "Category"}
+        Category
       </label>
       <input
         type="text"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
         className="w-full px-4 py-2 border rounded-md"
-        placeholder={isSubCategory ? "Sub Category Name" : "Category Name"}
+        placeholder={"Category Name"}
         required
       />
     </div>
